@@ -19,6 +19,8 @@ python run_env.py \
 
 ## 常用命令
 
+python launch_nodes.py
+
 ### 1. 基本数据收集（带触觉）
 ```bash
 python run_env.py --save-data --tactile-left-camera-id 22 --tactile-right-camera-id 24

@@ -6,10 +6,8 @@ import cv2
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-
-# Note: gyro/accel require specific device profiles; skip if conflicts occur
-# Only enable if your device supports IMU streams (D435i, D455, etc.)
-has_imu = False
+# config.enable_stream(rs.stream.gyro)  # Enable gyroscope
+# config.enable_stream(rs.stream.accel) # Enable accelerometer
 
 # Start streaming
 try:
