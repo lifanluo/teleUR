@@ -13,7 +13,7 @@ from robots.robot import BimanualRobot
 class Args:
     robot: str = "ur"
     hand_type: str = ""
-    hostname: str = "127.0.0.1"
+    hostname: str = "10.40.101.20"
     robot_ip: str = "10.40.101.10"
     faster: bool = True
     cam_names: Tuple[str, ...] = ("435",)

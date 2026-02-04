@@ -54,12 +54,8 @@ class RealSenseCamera(CameraDriver):
             )
 
             self.pipes.append(pipe)
-            try:
-                self.profiles[device_id] = pipe.start(config)
-                print(f"Connected to camera {i} ({device_id}).")
-            except RuntimeError as e:
-                print(f"❌ Failed to start camera {i} ({device_id}): {e}")
-                raise
+            self.profiles[device_id] = pipe.start(config)
+            print(f"Connected to camera {i} ({device_id}).")
 
         self.align = rs.align(rs.stream.color)
 
@@ -68,12 +64,8 @@ class RealSenseCamera(CameraDriver):
             self._get_frames()
 
     def _get_frames(self):
-        try:
-            framesets = [pipe.wait_for_frames() for pipe in self.pipes]
-            return [self.align.process(frameset) for frameset in framesets]
-        except RuntimeError as e:
-            print(f"⚠️  Error reading frames: {e}")
-            raise
+        framesets = [pipe.wait_for_frames() for pipe in self.pipes]
+        return [self.align.process(frameset) for frameset in framesets]
 
     def get_num_cameras(self):
         return len(self.device_ids)

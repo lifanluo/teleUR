@@ -6,11 +6,18 @@ import cv2
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
-config.enable_stream(rs.stream.gyro)  # Enable gyroscope
-config.enable_stream(rs.stream.accel) # Enable accelerometer
+
+# Note: gyro/accel require specific device profiles; skip if conflicts occur
+# Only enable if your device supports IMU streams (D435i, D455, etc.)
+has_imu = False
 
 # Start streaming
-pipeline.start(config)
+try:
+    pipeline.start(config)
+except RuntimeError as e:
+    print(f"❌ Failed to start pipeline: {e}")
+    print("   Try disabling IMU streams or check camera compatibility")
+    exit(1)
 
 try:
     while True:
@@ -18,8 +25,6 @@ try:
         frames = pipeline.wait_for_frames()
         
         color_frame = frames.get_color_frame()
-        gyro_frame = frames.first_or_default(rs.stream.gyro)
-        accel_frame = frames.first_or_default(rs.stream.accel)
         
         # Process color frame
         if color_frame:
@@ -29,15 +34,20 @@ try:
             # Show image
             cv2.imshow('RealSense RGB Image', color_image)
         
-        # Process gyro frame
-        if gyro_frame:
-            gyro_data = gyro_frame.as_motion_frame().get_motion_data()
-            print(f"Gyro: x={gyro_data.x:.5f}, y={gyro_data.y:.5f}, z={gyro_data.z:.5f}")
-        
-        # Process accel frame
-        if accel_frame:
-            accel_data = accel_frame.as_motion_frame().get_motion_data()
-            print(f"Accel: x={accel_data.x:.5f}, y={accel_data.y:.5f}, z={accel_data.z:.5f}")
+        # Check for motion frames (gyro/accel) if available
+        try:
+            gyro_frame = frames.first_or_default(rs.stream.gyro)
+            accel_frame = frames.first_or_default(rs.stream.accel)
+            
+            if gyro_frame:
+                gyro_data = gyro_frame.as_motion_frame().get_motion_data()
+                print(f"Gyro: x={gyro_data.x:.5f}, y={gyro_data.y:.5f}, z={gyro_data.z:.5f}")
+            
+            if accel_frame:
+                accel_data = accel_frame.as_motion_frame().get_motion_data()
+                print(f"Accel: x={accel_data.x:.5f}, y={accel_data.y:.5f}, z={accel_data.z:.5f}")
+        except:
+            pass  # IMU not available on this device
 
         # Press 'q' to quit
         if cv2.waitKey(1) & 0xFF == ord('q'):

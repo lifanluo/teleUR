@@ -126,7 +126,7 @@ class Args:
     base_camera_port: int = 5000
     tactile_left_camera_id: int = 2  # OpenCV camera ID for left tactile
     tactile_right_camera_id: int = 4  # OpenCV camera ID for right tactile
-    hostname: str = "127.0.0.1"
+    hostname: str = "10.40.101.20"
     hz: int = 50
     show_camera_view: bool = True
     agent: str = "quest"

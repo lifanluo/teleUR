@@ -8,7 +8,10 @@
 - **[QUICK_START.md](QUICK_START.md)** - 命令行使用快速指南，解决参数问题
 
 ### 📸 相机配置
+
 - **[TACTILE_CAMERA_SETUP.md](TACTILE_CAMERA_SETUP.md)** - RealSense和触觉传感器配置详细指南
+- **scripts/open_two_cams.py** - 示例脚本：使用 OpenCV 打开两个本地摄像头并并排显示；按 `s` 保存快照，按 `q` 退出。
+- **scripts/viz_realsense.py** - 示例脚本：可视化 RealSense 摄像头（RGB、深度、红外线）；按 `d` 切换深度热力图，按 `s` 保存帧，按 `q` 退出。
 
 ### 📊 数据可视化
 - **[VISUALIZATION_README.md](VISUALIZATION_README.md)** - 可视化工具快速入门 ⭐推荐先看
@@ -26,6 +29,12 @@ python run_env.py \
   --save-data \
   --tactile-left-camera-id 22 \
   --tactile-right-camera-id 24
+```
+```bash
+python run_env.py \
+  --save-data \
+  --tactile-left-camera-id 1 \
+  --tactile-right-camera-id 9
 ```
 
 **详细说明:** [QUICK_START.md](QUICK_START.md)
