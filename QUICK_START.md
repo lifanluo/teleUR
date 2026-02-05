@@ -28,7 +28,10 @@ python run_env.py --save-data --tactile-left-camera-id 22 --tactile-right-camera
 
 ### 2. 不使用触觉传感器
 ```bash
-python run_env.py --no-use-tactile --save-data
+python run_env.py \
+  --no-use-camera-node \
+  --use-dummy-base-camera \
+  --no-use-tactile
 ```
 
 ### 3. 保存所有图像为PNG
