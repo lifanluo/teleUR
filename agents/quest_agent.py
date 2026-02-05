@@ -251,6 +251,8 @@ class SingleArmQuestAgent(Agent):
                 delta_rot_ur = inverse_angle(delta_rot_ur,"z")
                 next_ee_rot_ur = delta_rot_ur.T @ self.reference_ee_rot_ur
                 next_ee_pos_ur = delta_pos_ur + self.reference_ee_pos_ur
+                print("next ee pos ur:",next_ee_pos_ur)
+                print("next ee rot ur:",next_ee_rot_ur)
 
                 # if self.use_vel_ik:
                 #     next_ee_pos_mj = apply_transfer(ur2mj, next_ee_pos_ur)

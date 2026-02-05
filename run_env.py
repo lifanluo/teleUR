@@ -18,6 +18,7 @@ from agents.agent import BimanualAgent, SafetyWrapper
 from camera_node import ZMQClientCamera
 from cameras.opencv_camera import OpenCVCamera
 from cameras.realsense_camera import RealSenseCamera
+from cameras.dummy_camera import DummyCamera
 from env import RobotEnv
 from robot_node import ZMQClientRobot
 
@@ -139,6 +140,7 @@ class Args:
     realsense_width: int = 640  # RealSense camera resolution width
     realsense_height: int = 480  # RealSense camera resolution height
     realsense_fps: int = 30  # RealSense camera FPS
+    use_dummy_base_camera: bool = False  # run without a physical RealSense (black frames)
     tactile_width: int = 640  # Tactile camera resolution width
     tactile_height: int = 480  # Tactile camera resolution height
     data_dir: str = "./shared/data/bc_data"
@@ -171,15 +173,24 @@ def main(args):
             "base_camera": ZMQClientCamera(port=args.base_camera_port, host=args.hostname),
         }
     else:
-        print("Initializing RealSense base camera...")
-        camera_clients = {
-            "base_camera": RealSenseCamera(
-                height=args.realsense_height,
-                width=args.realsense_width,
-                fps=args.realsense_fps,
-                img_size=(args.realsense_width, args.realsense_height),
-            ),
-        }
+        if args.use_dummy_base_camera:
+            print("Using Dummy base camera (no RealSense connected)...")
+            camera_clients = {
+                "base_camera": DummyCamera(
+                    height=args.realsense_height,
+                    width=args.realsense_width,
+                ),
+            }
+        else:
+            print("Initializing RealSense base camera...")
+            camera_clients = {
+                "base_camera": RealSenseCamera(
+                    height=args.realsense_height,
+                    width=args.realsense_width,
+                    fps=args.realsense_fps,
+                    img_size=(args.realsense_width, args.realsense_height),
+                ),
+            }
     
     # Add tactile cameras if enabled (using OpenCV webcams)
     if args.use_tactile:
